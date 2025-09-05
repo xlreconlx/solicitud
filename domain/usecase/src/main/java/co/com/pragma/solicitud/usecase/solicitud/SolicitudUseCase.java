@@ -16,7 +16,12 @@ public class SolicitudUseCase {
     private final UsuarioGateway usuarioGateway;
     private static final Integer ESTADO_PENDIENTE_ID = 1;
 
-    public Mono<Solicitud> registrarSolicitud(Solicitud solicitud){
+    public Mono<Solicitud> registrarSolicitud(Solicitud solicitud, String token, String sessionEmail){
+
+        if (!solicitud.getEmail().equalsIgnoreCase(sessionEmail)) {
+            return Mono.error(new SecurityException("No puedes crear solicitudes para otro usuario"));
+        }
+
         if (solicitud.getMonto() == null || solicitud.getMonto() <= 0) {
             return Mono.error(new IllegalArgumentException("El monto debe ser mayor a 0"));
         }
@@ -24,7 +29,7 @@ public class SolicitudUseCase {
             return Mono.error(new IllegalArgumentException("El plazo debe ser mayor a 0"));
         }
 
-        return usuarioGateway.existeUsuarioPorEmail(solicitud.getEmail())
+        return usuarioGateway.existeUsuarioPorEmail(solicitud.getEmail(), token)
                 .flatMap(existe -> {
                     if (!existe) {
                         return Mono.error(new IllegalArgumentException("El correo no esta registrado"));
