@@ -1,5 +1,6 @@
 package co.com.pragma.solicitud.r2dbcmysql.entity;
 
+import co.com.pragma.solicitud.model.solicitud.Solicitud;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,5 +20,4 @@ public class R2dbcSolicitud {
     private String email;
     private Integer idEstado;
     private Integer idTipoPrestamo;
-
 }

@@ -13,6 +13,6 @@ public class TipoPrestamo {
     private String nombre;
     private Long montoMinimo;
     private Long montoMaximo;
-    private int tasaInteres;
+    private Double tasaInteres;
     private boolean validacionAutomatica;
 }

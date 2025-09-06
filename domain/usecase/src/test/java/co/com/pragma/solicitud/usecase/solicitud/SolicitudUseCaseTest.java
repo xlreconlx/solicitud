@@ -4,7 +4,7 @@ import co.com.pragma.solicitud.model.estado.Estado;
 import co.com.pragma.solicitud.model.estado.gateways.EstadoRepository;
 import co.com.pragma.solicitud.model.solicitud.Solicitud;
 import co.com.pragma.solicitud.model.solicitud.gateways.SolicitudRepository;
-import co.com.pragma.solicitud.model.solicitud.gateways.UsuarioGateway;
+import co.com.pragma.solicitud.model.usuario.gateway.UsuarioGateway;
 import co.com.pragma.solicitud.model.tipoprestamo.TipoPrestamo;
 import co.com.pragma.solicitud.model.tipoprestamo.gateways.TipoPrestamoRepository;
 import org.junit.jupiter.api.BeforeEach;

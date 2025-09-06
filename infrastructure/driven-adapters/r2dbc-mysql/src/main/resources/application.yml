@@ -1,5 +1,8 @@
 spring:
   r2dbc:
+    host: localhost
+    port: 3306
+    db: solicitudes
     url: r2dbc:mysql://localhost:3306/solicitudes
     username: root
     password: 1234

@@ -58,6 +58,7 @@ public class SolicitudRouter {
             )
     })
     public RouterFunction<ServerResponse> solicitudRoutes(SolicitudHandler handler) {
-        return route(POST("api/v1/solicitud"), handler::registrarSolicitud);
+        return route(POST("api/v1/solicitud"), handler::registrarSolicitud)
+                .andRoute(GET("api/v1/solicitud"), handler::listarSolicitudes);
     }
 }

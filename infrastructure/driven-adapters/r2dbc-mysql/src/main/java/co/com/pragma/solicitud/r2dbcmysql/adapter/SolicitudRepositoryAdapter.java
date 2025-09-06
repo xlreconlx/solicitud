@@ -7,6 +7,7 @@ import co.com.pragma.solicitud.r2dbcmysql.mapper.SolicitudMapper;
 import co.com.pragma.solicitud.r2dbcmysql.repository.R2dbcSolicitudRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -15,6 +16,7 @@ import reactor.core.publisher.Mono;
 public class SolicitudRepositoryAdapter implements SolicitudRepository {
     private final SolicitudMapper solicitudMapper;
     private final R2dbcSolicitudRepository solicitudRepository;
+    private final TransactionalOperator transactionalOperator;
 
     @Override
     public Mono<Solicitud> save(Solicitud solicitud) {
@@ -29,10 +31,16 @@ public class SolicitudRepositoryAdapter implements SolicitudRepository {
     }
 
     @Override
+    public Flux<Solicitud> getSolicitudesByIdEstado(Integer idEstado, int page, int size) {
+        return solicitudRepository.getSolicitudesByIdEstado(idEstado, page, size)
+                .map(solicitudMapper::toModel).as(transactionalOperator::transactional);
+    }
+
+    @Override
     public Mono<Solicitud> update(Solicitud solicitud) {
         R2dbcSolicitud entity = solicitudMapper.toEntity(solicitud);
         return solicitudRepository.save(entity)
-                .map(solicitudMapper::toModel);
+                .map(solicitudMapper::toModel).as(transactionalOperator::transactional);
     }
 
     @Override
@@ -43,5 +51,10 @@ public class SolicitudRepositoryAdapter implements SolicitudRepository {
     @Override
     public Mono<Void> deleteByIdSolicitud(Integer idSolicitud) {
         return null;
+    }
+
+    @Override
+    public Mono<Long> countSolicitudesPendientes(Integer idEstado) {
+        return solicitudRepository.countByIdEstado(idEstado).as(transactionalOperator::transactional);
     }
 }

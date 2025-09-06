@@ -6,6 +6,7 @@ import co.com.pragma.solicitud.r2dbcmysql.mapper.TipoPrestamoMapper;
 import co.com.pragma.solicitud.r2dbcmysql.repository.R2dbcTipoPrestamoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -15,6 +16,7 @@ public class TipoPrestamoRepositoryAdapter implements TipoPrestamoRepository {
 
     private final R2dbcTipoPrestamoRepository tipoPrestamoRepository;
     private final TipoPrestamoMapper tipoPrestamoMapper;
+    private final TransactionalOperator transactionalOperator;
 
     @Override
     public Mono<TipoPrestamo> save(TipoPrestamo tipoPrestamo) {
@@ -29,7 +31,7 @@ public class TipoPrestamoRepositoryAdapter implements TipoPrestamoRepository {
     @Override
     public Mono<TipoPrestamo> findByIdTipoPrestamo(Integer idTipoPrestamo) {
         return tipoPrestamoRepository.findById(idTipoPrestamo)
-                .map(tipoPrestamoMapper::toModel);
+                .map(tipoPrestamoMapper::toModel).as(transactionalOperator::transactional);
     }
 
     @Override

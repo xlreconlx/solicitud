@@ -1,6 +1,7 @@
 package co.com.pragma.solicitud.restclient;
 
-import co.com.pragma.solicitud.model.solicitud.gateways.UsuarioGateway;
+import co.com.pragma.solicitud.model.usuario.Usuario;
+import co.com.pragma.solicitud.model.usuario.gateway.UsuarioGateway;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -30,5 +31,18 @@ public class UserRestClient implements UsuarioGateway {
                 .bodyToMono(Map.class)
                 .map(m -> (Boolean) m.get("exists"))
                 .onErrorReturn(false);
+    }
+
+    @Override
+    public Mono<Usuario> usuarioPorEmail(String email, String token) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/search-by-email")
+                        .queryParam("email", email)
+                        .build())
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .bodyToMono(Usuario.class);
+
     }
 }
